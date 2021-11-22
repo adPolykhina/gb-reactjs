@@ -1,8 +1,0 @@
-.List {
-    max-width: 360px;
-    width: 360px;
-    max-height: 400px;
-    background-color: rgb(255, 255, 255);
-    padding: 3px;
-    overflow: auto;
-}
