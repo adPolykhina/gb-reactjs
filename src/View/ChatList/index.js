@@ -12,14 +12,11 @@ import { Link } from 'react-router-dom'
 import { useStyles } from './styles'
 import CloseIcon from '@mui/icons-material/Close'
 
-export function ChatList() {
+export function ChatList({ chats, setChats }) {
     const styles = useStyles()
     const [newChat, setNewChat] = useState()
-    const [chats, setChats] = useState([
-        { name: 'Classmates', id: 0 },
-        { name: 'Work chat', id: 1 },
-        { name: 'Family', id: 2 },
-    ])
+
+    console.log(chats)
 
     // add new chat
     const addNewChat = () => {
@@ -56,16 +53,19 @@ export function ChatList() {
             </ListItem>
             {chats.map((chat, index) => (
                 <>
-                    <ListItem>
+                    <ListItem key={'item' + chat.id}>
                         <Link to={`/chat/${chat.id}`} className={styles.Link}>
-                            <ListItemText primary={chat.name} key={chat.id} />
+                            <ListItemText primary={chat.name} />
                         </Link>
                         <ListItemIcon>
                             <CloseIcon onClick={() => deleteChat(chat.name)} />
                         </ListItemIcon>
                     </ListItem>
                     {chats.length - 1 !== index && (
-                        <Divider className={styles.Divider} />
+                        <Divider
+                            key={'divider' + chat.id}
+                            className={styles.Divider}
+                        />
                     )}
                 </>
             ))}
