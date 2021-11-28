@@ -1,38 +1,47 @@
 import { Grid, List, Divider, TextField, Fab } from '@mui/material'
 import { Send } from '@mui/icons-material'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { MessageView } from './Message'
 import { useStyles } from './styles'
+import { useParams } from 'react-router-dom'
 
 export function ChatView() {
+    // styles
     const styles = useStyles()
     const ref = useRef(null)
-    // chat states
-    const [messages, setMessages] = useState([])
+    // current chat id
+    const { chatId } = useParams()
+    // state for all messages
+    const [messages, setMessages] = useState({})
+    // state for newMessage
     const [newMessage, setNewMessage] = useState('')
 
     // effect for recieving a message from robot
     useEffect(() => {
+        const chatMessages = messages[chatId] ?? []
         let timerId = null
-        if (messages.length) {
-            let lastAutor = messages[messages.length - 1]['author']
+        if (chatMessages.length) {
+            let lastAutor = chatMessages[chatMessages.length - 1]['author']
             if (lastAutor !== 'robot') {
                 timerId = setTimeout(
                     () =>
-                        setMessages([
+                        setMessages({
                             ...messages,
-                            {
-                                author: 'robot',
-                                message: 'Hello ' + lastAutor,
-                                id: messages.length,
-                            },
-                        ]),
+                            [chatId]: [
+                                ...chatMessages,
+                                {
+                                    author: 'robot',
+                                    message: 'Hello ' + lastAutor,
+                                    id: chatMessages.length,
+                                },
+                            ],
+                        }),
                     1500
                 )
             }
         }
         return () => clearInterval(timerId)
-    }, [messages])
+    }, [messages, chatId])
 
     // effect for auto focus on message field
     useEffect(() => {
@@ -43,24 +52,30 @@ export function ChatView() {
     const changeMessage = (event) => {
         setNewMessage(event.target.value)
     }
-    const sendMessage = () => {
+
+    const sendMessage = useCallback(() => {
         if (newMessage.trim()) {
-            setMessages([
+            setMessages({
                 ...messages,
-                {
-                    author: 'Anastasia',
-                    message: newMessage,
-                    id: messages.length,
-                },
-            ])
+                [chatId]: [
+                    ...(messages[chatId] ?? []),
+                    {
+                        author: 'Anastasia',
+                        message: newMessage,
+                        id: messages[chatId] ? messages[chatId].length : 0,
+                    },
+                ],
+            })
             setNewMessage('')
         } else alert('Message cannot be empty!')
-    }
+    }, [messages, chatId, newMessage])
+
+    const chatMessages = messages[chatId] ?? []
 
     return (
         <>
             <List className={styles.MessageList}>
-                {messages.map((message) => (
+                {chatMessages.map((message) => (
                     <MessageView
                         textMessage={message['message']}
                         author={message['author']}

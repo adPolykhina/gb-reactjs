@@ -1,19 +1,26 @@
 import { makeStyles } from '@mui/styles'
+import { height } from '@mui/system'
 
 export const useStyles = makeStyles((ctx) => ({
-    MessageList: {
-        height: '78vh',
-        overflowY: 'auto',
-        margin: '3px',
-    },
-    SendMessageArea: {
-        padding: '15px',
-        color: ctx.pallete.text.main,
-    },
     Divider: {
         backgroundColor: ctx.pallete.buttons.main,
     },
-    MessageField: {
+
+    Link: {
+        color: ctx.pallete.text.main,
+        textDecoration: 'none',
+    },
+
+    Button: {
+        color: ctx.pallete.text.main + ' !important',
+        width: '20vh',
+        borderColor: ctx.pallete.text.main,
+    },
+
+    ChatName: {
+        color: ctx.pallete.text.main,
+        width: '40vh',
+        maxWidth: '40vh',
         '& label.Mui-focused': {
             color: ctx.pallete.text.main,
         },

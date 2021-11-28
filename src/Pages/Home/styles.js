@@ -2,8 +2,8 @@ import { makeStyles } from '@mui/styles'
 
 export const useStyles = makeStyles((ctx) => ({
     Chat: {
-        maxHeight: '85vh',
-        height: '85vh',
+        maxHeight: '100vh',
+        height: '100vh',
         margin: '2px',
         backgroundColor: ctx.pallete.primary.main,
     },
@@ -16,9 +16,6 @@ export const useStyles = makeStyles((ctx) => ({
 
     ChatList: {
         color: ctx.pallete.text.main,
-    },
-
-    Divider: {
-        backgroundColor: ctx.pallete.buttons.main,
+        padding: '0px',
     },
 }))
