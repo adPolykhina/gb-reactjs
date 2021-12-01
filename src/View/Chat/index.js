@@ -4,78 +4,69 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { MessageView } from './Message'
 import { useStyles } from './styles'
 import { useParams } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { addMessage } from '../../Store/Messages'
+import { messagesSelector } from '../../Store/Messages'
+import { firstNameSelector } from '../../Store/Profile'
 
 export function ChatView() {
     // styles
     const styles = useStyles()
-    const ref = useRef(null)
     // current chat id
     const { chatId } = useParams()
-    // state for all messages
-    const [messages, setMessages] = useState({})
+    // messages
+    const messages = useSelector(messagesSelector(chatId))
+    const dispatch = useDispatch()
+    // current user
+    const { firstName } = useSelector(firstNameSelector)
     // state for newMessage
     const [newMessage, setNewMessage] = useState('')
 
+    const ref = useRef(null)
+
     // effect for recieving a message from robot
     useEffect(() => {
-        const chatMessages = messages[chatId] ?? []
         let timerId = null
-        if (chatMessages.length) {
-            let lastAutor = chatMessages[chatMessages.length - 1]['author']
+        if (messages.length) {
+            let lastAutor = messages[messages.length - 1]['author']
             if (lastAutor !== 'robot') {
-                timerId = setTimeout(
-                    () =>
-                        setMessages({
-                            ...messages,
-                            [chatId]: [
-                                ...chatMessages,
-                                {
-                                    author: 'robot',
-                                    message: 'Hello ' + lastAutor,
-                                    id: chatMessages.length,
-                                },
-                            ],
-                        }),
-                    1500
-                )
+                timerId = setTimeout(() => {
+                    dispatch(
+                        addMessage(
+                            { author: 'robot', message: 'Hello ' + lastAutor },
+                            chatId
+                        )
+                    )
+                }, 1500)
             }
         }
         return () => clearInterval(timerId)
-    }, [messages, chatId])
+    }, [dispatch, chatId, messages])
 
     // effect for auto focus on message field
     useEffect(() => {
         ref.current?.focus()
     }, [messages])
 
-    // functions for change states
+    // change mew message
     const changeMessage = (event) => {
         setNewMessage(event.target.value)
     }
 
+    // send message
     const sendMessage = useCallback(() => {
         if (newMessage.trim()) {
-            setMessages({
-                ...messages,
-                [chatId]: [
-                    ...(messages[chatId] ?? []),
-                    {
-                        author: 'Anastasia',
-                        message: newMessage,
-                        id: messages[chatId] ? messages[chatId].length : 0,
-                    },
-                ],
-            })
+            dispatch(
+                addMessage({ author: firstName, message: newMessage }, chatId)
+            )
             setNewMessage('')
         } else alert('Message cannot be empty!')
-    }, [messages, chatId, newMessage])
-
-    const chatMessages = messages[chatId] ?? []
+    }, [newMessage, firstName, dispatch, chatId])
 
     return (
         <>
             <List className={styles.MessageList}>
-                {chatMessages.map((message) => (
+                {messages.map((message) => (
                     <MessageView
                         textMessage={message['message']}
                         author={message['author']}

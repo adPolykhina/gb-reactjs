@@ -17,5 +17,6 @@ export const useStyles = makeStyles((ctx) => ({
     ChatList: {
         color: ctx.pallete.text.main,
         padding: '0px',
+        backgroundColor: ctx.pallete.dark.main,
     },
 }))

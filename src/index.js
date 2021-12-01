@@ -2,7 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider, createTheme } from '@mui/material'
+import { store } from './Store'
 import { AppView } from './app'
+import { Provider } from 'react-redux'
 
 const theme = createTheme({
     pallete: {
@@ -18,14 +20,19 @@ const theme = createTheme({
         text: {
             main: '#E1E8ED',
         },
+        dark: {
+            main: '#292f33',
+        },
     },
 })
 
 ReactDOM.render(
-    <ThemeProvider theme={theme}>
-        <BrowserRouter>
-            <AppView />
-        </BrowserRouter>
-    </ThemeProvider>,
+    <Provider store={store}>
+        <ThemeProvider theme={theme}>
+            <BrowserRouter>
+                <AppView />
+            </BrowserRouter>
+        </ThemeProvider>
+    </Provider>,
     document.getElementById('root')
 )
