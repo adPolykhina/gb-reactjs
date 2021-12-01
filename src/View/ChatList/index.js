@@ -1,73 +1,72 @@
 import {
     List,
     ListItemText,
-    Divider,
     ListItem,
     TextField,
-    Button,
     ListItemIcon,
+    InputAdornment,
+    IconButton,
 } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useStyles } from './styles'
 import CloseIcon from '@mui/icons-material/Close'
+import { useSelector, useDispatch } from 'react-redux'
+import { addChat, deleteChat } from '../../Store/Chats'
+import { chatsSelector } from '../../Store/Chats'
 
-export function ChatList({ chats, setChats }) {
+export function ChatList() {
+    // styles
     const styles = useStyles()
+    // chats list
+    const { chats } = useSelector(chatsSelector)
+    const dispatch = useDispatch()
+    // new chat
     const [newChat, setNewChat] = useState()
-
-    console.log(chats)
 
     // add new chat
     const addNewChat = () => {
         if (newChat.trim()) {
-            setChats([
-                ...chats,
-                {
-                    name: newChat,
-                    id: chats[chats.length - 1].id + 1,
-                },
-            ])
+            dispatch(addChat({ name: newChat }))
             setNewChat('')
         }
     }
 
-    //delete chat
-    const deleteChat = (name) => {
-        let newChats = chats.filter((chat) => chat.name !== name)
-        setChats(newChats)
-    }
-
     return (
         <List>
-            <ListItem>
+            <ListItem key={'AddNewChatKey'}>
                 <TextField
                     placeholder="chat name..."
                     className={styles.ChatName}
                     value={newChat}
                     onChange={(event) => setNewChat(event.target.value)}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    edge="end"
+                                    color="primary"
+                                    onClick={addNewChat}
+                                >
+                                    <AddIcon className={styles.AddButton} />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
                 />
-                <Button className={styles.Button} onClick={addNewChat}>
-                    Add chat
-                </Button>
             </ListItem>
-            {chats.map((chat, index) => (
-                <>
-                    <ListItem key={'item' + chat.id}>
-                        <Link to={`/chat/${chat.id}`} className={styles.Link}>
-                            <ListItemText primary={chat.name} />
-                        </Link>
-                        <ListItemIcon>
-                            <CloseIcon onClick={() => deleteChat(chat.name)} />
-                        </ListItemIcon>
-                    </ListItem>
-                    {chats.length - 1 !== index && (
-                        <Divider
-                            key={'divider' + chat.id}
-                            className={styles.Divider}
+            {chats.map((chat) => (
+                <ListItem key={chat.id} className={styles.ListItem}>
+                    <Link to={`/chat/${chat.id}`} className={styles.Link}>
+                        <ListItemText primary={chat.name} />
+                    </Link>
+                    <ListItemIcon className={styles.ListItemIcon}>
+                        <CloseIcon
+                            onClick={() => dispatch(deleteChat(chat.id))}
                         />
-                    )}
-                </>
+                    </ListItemIcon>
+                </ListItem>
             ))}
         </List>
     )

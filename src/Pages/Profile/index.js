@@ -11,16 +11,15 @@ import { useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import { useStyles } from './styles'
 import { updateProfile, toggleProfileStatus } from '../../Store/Profile'
+import { profileSelector } from '../../Store/Profile'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
 export function Profile() {
     const [editMode, setEditMode] = useState(false)
-    const { firstName, lastName, birthday, status, profession } = useSelector(
-        (state) => {
-            return state.profile
-        }
-    )
+    const { firstName, lastName, birthday, status, profession } =
+        useSelector(profileSelector)
+
     const [form, setForm] = useState({
         firstName,
         lastName,

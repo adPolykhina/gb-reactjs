@@ -1,5 +1,4 @@
 import { makeStyles } from '@mui/styles'
-import { height } from '@mui/system'
 
 export const useStyles = makeStyles((ctx) => ({
     Divider: {
@@ -9,6 +8,7 @@ export const useStyles = makeStyles((ctx) => ({
     Link: {
         color: ctx.pallete.text.main,
         textDecoration: 'none',
+        width: '90%',
     },
 
     Button: {
@@ -18,9 +18,7 @@ export const useStyles = makeStyles((ctx) => ({
     },
 
     ChatName: {
-        color: ctx.pallete.text.main,
-        width: '40vh',
-        maxWidth: '40vh',
+        width: '100%',
         '& label.Mui-focused': {
             color: ctx.pallete.text.main,
         },
@@ -31,12 +29,35 @@ export const useStyles = makeStyles((ctx) => ({
             '& fieldset': {
                 borderColor: ctx.pallete.buttons.main,
             },
-            '&:hover fieldset': {
+            '& :hover fieldset': {
                 borderColor: ctx.pallete.buttons.main,
             },
-            '&.Mui-focused fieldset': {
+            '& .Mui-focused fieldset': {
                 borderColor: ctx.pallete.buttons.main,
             },
+            '& .MuiOutlinedInput-input': {
+                color: ctx.pallete.text.main,
+            },
+        },
+    },
+
+    AddButton: {
+        color: ctx.pallete.text.main,
+    },
+
+    ListItem: {
+        borderBottomColor: ctx.pallete.text.main,
+        borderBottom: 'solid',
+        borderBottomWidth: '1px',
+    },
+
+    ListItemIcon: {
+        justifyContent: 'flex-end',
+        '& .MuiSvgIcon-root': {
+            color: ctx.pallete.text.main,
+        },
+        '& .MuiSvgIcon-root:hover': {
+            cursor: 'pointer',
         },
     },
 }))
