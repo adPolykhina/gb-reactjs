@@ -21,7 +21,6 @@ export const messagesReducer = (state = INITIAL_STATE, action) => {
         }
         case DELETE_CHAT: {
             delete state.messages[action.payload]
-            console.log('messages', state)
             return {
                 ...state,
             }

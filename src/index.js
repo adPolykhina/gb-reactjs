@@ -2,7 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider, createTheme } from '@mui/material'
-import { store } from './Store'
+import { store, persistor } from './Store'
+import { PersistGate } from 'redux-persist/integration/react'
 import { AppView } from './app'
 import { Provider } from 'react-redux'
 
@@ -28,11 +29,13 @@ const theme = createTheme({
 
 ReactDOM.render(
     <Provider store={store}>
-        <ThemeProvider theme={theme}>
-            <BrowserRouter>
-                <AppView />
-            </BrowserRouter>
-        </ThemeProvider>
+        <PersistGate persistor={persistor}>
+            <ThemeProvider theme={theme}>
+                <BrowserRouter>
+                    <AppView />
+                </BrowserRouter>
+            </ThemeProvider>
+        </PersistGate>
     </Provider>,
     document.getElementById('root')
 )

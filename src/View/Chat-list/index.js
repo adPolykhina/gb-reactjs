@@ -12,26 +12,12 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useStyles } from './styles'
 import CloseIcon from '@mui/icons-material/Close'
-import { useSelector, useDispatch } from 'react-redux'
-import { addChat, deleteChat } from '../../Store/Chats'
-import { chatsSelector } from '../../Store/Chats'
 
-export function ChatList() {
+export function ChatListView({ chats, addNewChat, deleteChat }) {
     // styles
     const styles = useStyles()
-    // chats list
-    const { chats } = useSelector(chatsSelector)
-    const dispatch = useDispatch()
     // new chat
     const [newChat, setNewChat] = useState()
-
-    // add new chat
-    const addNewChat = () => {
-        if (newChat.trim()) {
-            dispatch(addChat({ name: newChat }))
-            setNewChat('')
-        }
-    }
 
     return (
         <List>
@@ -47,7 +33,7 @@ export function ChatList() {
                                 <IconButton
                                     edge="end"
                                     color="primary"
-                                    onClick={addNewChat}
+                                    onClick={() => addNewChat(newChat)}
                                 >
                                     <AddIcon className={styles.AddButton} />
                                 </IconButton>
@@ -62,9 +48,7 @@ export function ChatList() {
                         <ListItemText primary={chat.name} />
                     </Link>
                     <ListItemIcon className={styles.ListItemIcon}>
-                        <CloseIcon
-                            onClick={() => dispatch(deleteChat(chat.id))}
-                        />
+                        <CloseIcon onClick={() => deleteChat(chat.id)} />
                     </ListItemIcon>
                 </ListItem>
             ))}
