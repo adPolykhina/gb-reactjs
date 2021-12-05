@@ -1,26 +1,43 @@
 import { Grid } from '@mui/material'
 import { useStyles } from './styles'
-import { ChatView, ChatList } from '../../View'
 import { Routes, Route } from 'react-router'
-import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { ChatListView } from '../../View'
+import { Chat } from '../../Containers'
+import { addChat, deleteChat, chatsSelector } from '../../Store/Chats'
 
-export function Home() {
+export function HomePage() {
     const styles = useStyles()
-    const [chats, setChats] = useState([
-        { name: 'Classmates', id: 0 },
-        { name: 'Work chat', id: 1 },
-        { name: 'Family', id: 2 },
-    ])
+
+    // chats list
+    const { chats } = useSelector(chatsSelector)
+    const dispatch = useDispatch()
+
+    // add new chat
+    const addNewChat = (newChat) => {
+        if (newChat.trim()) {
+            dispatch(addChat({ name: newChat }))
+        }
+    }
+
+    // delete existing chat
+    const deleteExistingChat = (chatId) => {
+        dispatch(deleteChat(chatId))
+    }
 
     return (
         <>
             <Grid container>
                 <Grid item xs={4} className={styles.ChatList}>
-                    <ChatList chats={chats} setChats={setChats} />
+                    <ChatListView
+                        chats={chats}
+                        addNewChat={addNewChat}
+                        deleteChat={deleteExistingChat}
+                    />
                 </Grid>
                 <Grid item xs={8} className={styles.Chat}>
                     <Routes>
-                        <Route path="/chat/:chatId" element={<ChatView />} />
+                        <Route path="/chat/:chatId" element={<Chat />} />
                         <Route
                             path="/chat/"
                             element={<div>Выберите чат</div>}

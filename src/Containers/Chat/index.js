@@ -9,7 +9,7 @@ import { addMessage } from '../../Store/Messages'
 import { messagesSelector } from '../../Store/Messages'
 import { firstNameSelector } from '../../Store/Profile'
 
-export function ChatView() {
+export function Chat() {
     // styles
     const styles = useStyles()
     // current chat id
@@ -23,25 +23,6 @@ export function ChatView() {
     const [newMessage, setNewMessage] = useState('')
 
     const ref = useRef(null)
-
-    // effect for recieving a message from robot
-    useEffect(() => {
-        let timerId = null
-        if (messages.length) {
-            let lastAutor = messages[messages.length - 1]['author']
-            if (lastAutor !== 'robot') {
-                timerId = setTimeout(() => {
-                    dispatch(
-                        addMessage(
-                            { author: 'robot', message: 'Hello ' + lastAutor },
-                            chatId
-                        )
-                    )
-                }, 1500)
-            }
-        }
-        return () => clearInterval(timerId)
-    }, [dispatch, chatId, messages])
 
     // effect for auto focus on message field
     useEffect(() => {

@@ -1,3 +1,3 @@
-export * from './Chat'
 export * from './Nav'
-export * from './ChatList'
+export * from './Profile'
+export * from './Chat-list'
