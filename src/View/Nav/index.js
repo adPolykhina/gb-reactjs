@@ -17,6 +17,9 @@ export function NavBar() {
                     <Link to="/profile" className={styles.MenuItem}>
                         Profile
                     </Link>
+                    <Link to="/chess" className={styles.MenuItem}>
+                        Chess players
+                    </Link>
                 </div>
             </Toolbar>
         </AppBar>
